@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
+import 'package:reddsource/constants/design.dart';
 import 'package:reddsource/services/reddit_service.dart';
 import 'package:reddsource/services/services.dart';
 import 'package:reddsource/widgets/post_list.dart';
@@ -32,9 +33,9 @@ class _SubredditScreenState extends State<SubredditScreen> {
       builder: (BuildContext context, AsyncSnapshot<Subreddit> snapshot) {
         if(!snapshot.hasData) return Scaffold(body: Center(child: Text('Loading...'),),);
         return Scaffold(
+          backgroundColor: backgroundColor,
           appBar: AppBar(
             title: Text(snapshot.data.title),
-            leading: Icon(Icons.home),
           ),
           body: SafeArea(
             child: Center(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:reddsource/constants/design.dart';
 import 'package:reddsource/constants/functional.dart';
 import 'package:reddsource/screens/main_screen/main_screen.dart';
 import 'package:reddsource/services/reddit_service.dart';
@@ -22,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: InAppWebView(
           initialUrl: getIt.get<RedditService>().generateAuthUrl(),
