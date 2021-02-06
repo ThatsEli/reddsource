@@ -8,7 +8,8 @@ class RedditService {
   Reddit _reddit;
   String _authUrl, state;
   bool ready;
-  Redditor me;
+  Future<Redditor> me;
+  List<Subreddit> _subscribedSubreddits = [];
 
   RedditService() {
     DataService dataService = getIt.get<DataService>();
@@ -20,9 +21,7 @@ class RedditService {
         userAgent: userAgent,
       );
       ready = true;
-      () async {
-        me = await _reddit.user.me();
-      }();
+      _afterAuth();
     } else {
       _reddit = Reddit.createInstalledFlowInstance(
         clientId: clientId,
@@ -34,16 +33,32 @@ class RedditService {
     }
   }
 
+  void _afterAuth() {
+    me = _reddit.user.me();
+    _refreshSubscribedSubreddits();
+    if(_reddit.auth.isValid) {
+      getIt.get<DataService>().prefs.setString('redditCredentials', _reddit.auth.credentials.toJson());
+      ready = true;
+    }
+  }
+
+  void _refreshSubscribedSubreddits() {
+    _subscribedSubreddits = [];
+    _reddit.user.subreddits().listen((Subreddit subreddit) {
+      _subscribedSubreddits.add(subreddit);
+    }).onDone(() {
+      _subscribedSubreddits.sort((Subreddit a, Subreddit b) {
+        return a.displayName.compareTo(b.displayName);
+      });
+    });
+  }
+
   String generateAuthUrl() => _authUrl;
 
   Future<bool> authorize(String code) async {
     await _reddit.auth.authorize(code);
-    if(_reddit.auth.isValid) {
-      getIt.get<DataService>().prefs.setString('redditCredentials', _reddit.auth.credentials.toJson());
-      ready = true;
-      return true;
-    }
-    return false;
+    _afterAuth();
+    return _reddit.auth.isValid;
   }
 
   bool isAuthorized() {
@@ -57,5 +72,7 @@ class RedditService {
   Stream<UserContent> getFrontPageStream() {
     return _reddit.front.best();
   }
+
+  List<Subreddit> getSubscribedSubreddits() => _subscribedSubreddits;
 
 }

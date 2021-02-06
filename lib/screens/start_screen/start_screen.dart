@@ -17,7 +17,7 @@ class _StartScreenState extends State<StartScreen> {
   void initState() {
     super.initState();
     () async {
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 100));
       if(getIt.get<RedditService>().ready) {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
       } else {
@@ -30,7 +30,7 @@ class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text('Loading...'))
+      body: Center(child: Text('Logging in...'))
     );
   }
 }

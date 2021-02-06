@@ -1,5 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
+import 'package:reddsource/constants/design.dart';
 
 class Post extends StatelessWidget {
   final Submission submission;
@@ -9,6 +10,7 @@ class Post extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: cardColor,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
