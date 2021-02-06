@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:reddsource/screens/login_screen/login_screen.dart';
+import 'package:reddsource/screens/start_screen/start_screen.dart';
 import 'package:reddsource/services/services.dart';
 
-void main() {
-  initServices();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
   runApp(MyApp());
 }
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Reddsource',
       theme: ThemeData.dark(),
-      home: LoginScreen()
+      home: StartScreen()
     );
   }
 }

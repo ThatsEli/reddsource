@@ -7,22 +7,43 @@ class RedditService {
 
   Reddit _reddit;
   String _authUrl, state;
+  bool ready;
 
   RedditService() {
-    state = getIt.get<DataService>().randomString(8);
-    _reddit = Reddit.createInstalledFlowInstance(
-      clientId: 'R5BXxeTyANfbfg',
-      userAgent: 'reddsource-client',
-      redirectUri: Uri.parse(redirectUrl)
-    );
-    _authUrl = _reddit.auth.url(['*'], state).toString();
+    DataService dataService = getIt.get<DataService>();
+    state = dataService.randomString(8);
+    if(dataService.prefs.containsKey('redditCredentials')) {
+      _reddit = Reddit.restoreInstalledAuthenticatedInstance(
+        dataService.prefs.getString('redditCredentials'),
+        clientId: clientId,
+        userAgent: userAgent,
+      );
+      ready = true;
+    } else {
+      _reddit = Reddit.createInstalledFlowInstance(
+        clientId: clientId,
+        userAgent: userAgent,
+        redirectUri: Uri.parse(redirectUrl)
+      );
+      ready = false;
+      _authUrl = _reddit.auth.url(['*'], state).toString();
+    }
   }
 
   String generateAuthUrl() => _authUrl;
 
   Future<bool> authorize(String code) async {
     await _reddit.auth.authorize(code);
-    return _reddit.auth.isValid;
-  } 
+    if(_reddit.auth.isValid) {
+      getIt.get<DataService>().prefs.setString('redditCredentials', _reddit.auth.credentials.toJson());
+      ready = true;
+      return true;
+    }
+    return false;
+  }
+
+  bool isAuthorized() {
+    return false;
+  }
 
 }

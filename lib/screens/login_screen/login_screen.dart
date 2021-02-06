@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:reddsource/constants/functional.dart';
-import 'package:reddsource/screens/start_screen/start_screen.dart';
+import 'package:reddsource/screens/main_screen/main_screen.dart';
 import 'package:reddsource/services/reddit_service.dart';
 import 'package:reddsource/services/services.dart';
 
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             if(newUrl.contains(filter)) {
               final String code = newUrl.replaceAll(filter, '');
               if(await getIt.get<RedditService>().authorize(code)) {
-                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => StartScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
               } else {
                 throw ErrorDescription('No auth');
               }

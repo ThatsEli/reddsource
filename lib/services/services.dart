@@ -4,7 +4,8 @@ import 'package:reddsource/services/reddit_service.dart';
 
 final getIt = GetIt.instance;
 
-void initServices() {
+Future<void> initServices() async {
   getIt.registerSingleton<DataService>(DataService());
+  await getIt.get<DataService>().init();
   getIt.registerSingleton<RedditService>(RedditService());
 }
