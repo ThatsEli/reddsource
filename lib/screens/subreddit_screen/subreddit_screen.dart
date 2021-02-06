@@ -2,6 +2,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:reddsource/services/reddit_service.dart';
 import 'package:reddsource/services/services.dart';
+import 'package:reddsource/widgets/post_list.dart';
 
 class SubredditScreen extends StatefulWidget {
   final String subredditName;
@@ -37,7 +38,7 @@ class _SubredditScreenState extends State<SubredditScreen> {
           ),
           body: SafeArea(
             child: Center(
-              child: Text(snapshot.data.title)
+              child: PostList(contentStream: snapshot.data.hot()),
             ),
           ),
         );
