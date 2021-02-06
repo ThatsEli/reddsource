@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:reddsource/screens/main_screen/main_drawer.dart';
+import 'package:reddsource/services/reddit_service.dart';
+import 'package:reddsource/services/services.dart';
+import 'package:reddsource/widgets/post_list.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key key}) : super(key: key);
@@ -6,7 +10,13 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text('Cool!')
+      appBar: AppBar(
+        title: Text('Frontpage'),
+      ),
+      drawer: MainDrawer(),
+      body: SafeArea(
+        child: PostList(contentStream: getIt<RedditService>().getFrontPageStream()),
+      )
     );
   }
 }

@@ -29,6 +29,7 @@ class _PostListState extends State<PostList> {
 
   @override
   Widget build(BuildContext context) {
+    if(submissions.length == 0) return Center(child: Text('Loading...'));
     return ListView.builder(
       itemCount: submissions.length,
       itemBuilder: (BuildContext context, int index) {

@@ -8,6 +8,7 @@ class RedditService {
   Reddit _reddit;
   String _authUrl, state;
   bool ready;
+  Redditor me;
 
   RedditService() {
     DataService dataService = getIt.get<DataService>();
@@ -19,6 +20,9 @@ class RedditService {
         userAgent: userAgent,
       );
       ready = true;
+      () async {
+        me = await _reddit.user.me();
+      }();
     } else {
       _reddit = Reddit.createInstalledFlowInstance(
         clientId: clientId,
@@ -48,6 +52,10 @@ class RedditService {
 
   SubredditRef getSubredditRef(String name) {
     return _reddit.subreddit(name);
+  }
+
+  Stream<UserContent> getFrontPageStream() {
+    return _reddit.front.best();
   }
 
 }
