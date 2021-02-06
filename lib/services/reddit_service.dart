@@ -46,4 +46,8 @@ class RedditService {
     return false;
   }
 
+  SubredditRef getSubredditRef(String name) {
+    return _reddit.subreddit(name);
+  }
+
 }
