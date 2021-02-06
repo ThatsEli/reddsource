@@ -1,0 +1,1 @@
+const String redirectUrl = 'https://s.thatseliyt.de/';
