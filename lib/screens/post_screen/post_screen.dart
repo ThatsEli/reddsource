@@ -1,6 +1,7 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:reddsource/constants/design.dart';
+import 'package:reddsource/screens/post_screen/comment_section.dart';
 import 'package:reddsource/widgets/post.dart';
 
 class PostScreen extends StatefulWidget {
@@ -46,17 +47,21 @@ class _PostScreenState extends State<PostScreen> {
             ],
           );
 
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: snapshot.data.comments.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if(index == 0)
-                 return postWidget;
-              return Text(
-                (snapshot.data.comments[index-1] as Comment).body
-              );
-            }
+          return CommentSection(
+            leadingWidget: postWidget,
+            commentForest: snapshot.data as CommentForest
           );
+          // return ListView.builder(
+          //   shrinkWrap: true,
+          //   itemCount: snapshot.data.comments.length + 1,
+          //   itemBuilder: (BuildContext context, int index) {
+          //     if(index == 0)
+          //        return postWidget;
+          //     return Text(
+          //       (snapshot.data.comments[index-1] as Comment).body
+          //     );
+          //   }
+          // );
         },
       ),
       // ListView(
