@@ -29,29 +29,59 @@ class _PostScreenState extends State<PostScreen> {
       appBar: AppBar(
         title: Text(widget.submission.title),
       ),
-      body: Column(
-        children: [
-          Hero(
+      body: FutureBuilder(
+        future: _comments,
+        builder: (BuildContext context, AsyncSnapshot<CommentForest> snapshot) {
+
+          Widget postWidget = Hero(
             tag: Key(widget.submission.id),
             child: Post(submission: widget.submission, isInPostScreen: true)
-          ),
-          FutureBuilder(
-            future: _comments,
-            builder: (BuildContext context, AsyncSnapshot<CommentForest> snapshot) {
-              if(!snapshot.hasData) return Text('Loading...');
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data.comments.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Text(
-                    (snapshot.data.comments[index] as Comment).body
-                  );
-                }
+          );
+
+          if(!snapshot.hasData) return Column(
+            children: [
+              postWidget,
+              Text('Loading...'),
+              LinearProgressIndicator(),
+            ],
+          );
+
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: snapshot.data.comments.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              if(index == 0)
+                 return postWidget;
+              return Text(
+                (snapshot.data.comments[index-1] as Comment).body
               );
-            },
-          )
-        ],
+            }
+          );
+        },
       ),
+      // ListView(
+      //   children: [
+      //     Hero(
+      //       tag: Key(widget.submission.id),
+      //       child: Post(submission: widget.submission, isInPostScreen: true)
+      //     ),
+      //     FutureBuilder(
+      //       future: _comments,
+      //       builder: (BuildContext context, AsyncSnapshot<CommentForest> snapshot) {
+      //         if(!snapshot.hasData) return Text('Loading...');
+      //         return ListView.builder(
+      //           shrinkWrap: true,
+      //           itemCount: snapshot.data.comments.length,
+      //           itemBuilder: (BuildContext context, int index) {
+      //             return Text(
+      //               (snapshot.data.comments[index] as Comment).body
+      //             );
+      //           }
+      //         );
+      //       },
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
