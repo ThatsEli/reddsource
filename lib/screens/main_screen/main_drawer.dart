@@ -2,6 +2,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:reddsource/constants/design.dart';
 import 'package:reddsource/screens/main_screen/main_screen.dart';
+import 'package:reddsource/screens/subreddit_screen/subreddit_screen.dart';
 import 'package:reddsource/services/reddit_service.dart';
 import 'package:reddsource/services/services.dart';
 
@@ -54,6 +55,9 @@ class MainDrawer extends StatelessWidget {
                   ListTile(
                     title: Text('r/' + subreddit.displayName),
                     leading: Icon(Icons.circle, color: Colors.blue),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SubredditScreen(subredditName: subreddit.displayName)));
+                    },
                   )
                 ).toList()
               ),

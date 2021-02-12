@@ -38,7 +38,10 @@ class _PostListState extends State<PostList> {
     return ListView.builder(
       itemCount: submissions.length,
       itemBuilder: (BuildContext context, int index) {
-        return Post(submission: submissions[index]);
+        return Hero(
+          tag: Key(submissions[index].id),
+          child: Post(submission: submissions[index])
+        );
       },
     );
   }

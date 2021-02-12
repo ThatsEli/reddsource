@@ -7,15 +7,16 @@ import 'package:reddsource/screens/post_screen/submission_info_widget.dart';
 
 class Post extends StatelessWidget {
   final Submission submission;
+  final bool isInPostScreen;
 
-  const Post({Key key, @required this.submission}) : super(key: key);
+  const Post({Key key, @required this.submission, this.isInPostScreen = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PostScreen(submission: submission)));
+        if(!isInPostScreen) Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PostScreen(submission: submission)));
       },
       child: Card(
         color: cardColor,

@@ -1,8 +1,7 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:reddsource/constants/design.dart';
-import 'package:reddsource/screens/post_screen/submission_button_bar.dart';
-import 'package:reddsource/screens/post_screen/submission_info_widget.dart';
+import 'package:reddsource/widgets/post.dart';
 
 class PostScreen extends StatefulWidget {
   final Submission submission;
@@ -14,6 +13,15 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+
+  Future<CommentForest> _comments;
+
+  @override
+  void initState() {
+    super.initState();
+    _comments = widget.submission.refreshComments();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,28 +29,26 @@ class _PostScreenState extends State<PostScreen> {
       appBar: AppBar(
         title: Text(widget.submission.title),
       ),
-      body: ListView(
-        shrinkWrap: true,
+      body: Column(
         children: [
-          Card(
-            color: cardColor,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SubmissionInfoWidget(submission: widget.submission),
-                  SizedBox(height: 10),
-                  Text(
-                    widget.submission.title,
-                    style: Theme.of(context).textTheme.headline6
-                  ),
-                  SizedBox(height: 10),
-                  Text(widget.submission.selftext),
-                  SubmissionButtonBar(submission: widget.submission),
-                ],
-              ),
-            ),  
+          Hero(
+            tag: Key(widget.submission.id),
+            child: Post(submission: widget.submission, isInPostScreen: true)
+          ),
+          FutureBuilder(
+            future: _comments,
+            builder: (BuildContext context, AsyncSnapshot<CommentForest> snapshot) {
+              if(!snapshot.hasData) return Text('Loading...');
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data.comments.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Text(
+                    (snapshot.data.comments[index] as Comment).body
+                  );
+                }
+              );
+            },
           )
         ],
       ),
